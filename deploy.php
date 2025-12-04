@@ -21,12 +21,7 @@ host('18.235.108.46')
     ->set('remote_user', 'sa04-deployer')
     ->set('identity_file', '~/.ssh/id_rsa')
     ->set('deploy_path', '/var/www/es-cipfpbatoi-deployer/html');
-
-// Hooks
-
-task('artisan:migrate', function () {
-   
-});
+ 
 
 task('build', function () {
     run('cd {{release_path}} && build');
@@ -34,3 +29,8 @@ task('build', function () {
 
 after('deploy:failed', 'deploy:unlock');
 
+task('reload:php-fpm', function () {
+    run('sudo /etc/init.d/php8.3-fpm restart');
+   });
+   # inclusió en el cicle de desplegament
+   after('deploy', 'reload:php-fpm');
