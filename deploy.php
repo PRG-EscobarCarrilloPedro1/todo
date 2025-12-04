@@ -3,9 +3,13 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 
+set('application', 'ProyectoTodo');
+
+set('git_tty', true);
+
 // Config
 
-set('repository', 'https://github.com/acoloma-edu/todo.git');
+set('repository', 'https://github.com/PRG-EscobarCarrilloPedro1/todo.git');
 
 add('shared_files', []);
 add('shared_dirs', []);
@@ -13,19 +17,20 @@ add('writable_dirs', []);
 
 // Hosts
 
-host('192.168.1.137')
-    ->set('remote_user', 'ddaw-ud4-deployer')
-    ->set('deploy_path', '/var/www/ddaw-ud4-a4/html');
+host('18.235.108.46')
+    ->set('remote_user', 'sa04-deployer')
+    ->set('identity_file', '~/.ssh/id_rsa')
+    ->set('deploy_path', '/var/www/es-cipfpbatoi-deployer/html');
 
 // Hooks
-after('deploy:failed', 'deploy:unlock');
+
+task('artisan:migrate', function () {
+   
+});
 
 task('build', function () {
     run('cd {{release_path}} && build');
-});
+   });
 
-task('reiniciar-fpm', function () {
-    run('sudo /etc/init.d/php8.1-fpm restart');
-});
+after('deploy:failed', 'deploy:unlock');
 
-after('deploy', 'reiniciar-fpm');
